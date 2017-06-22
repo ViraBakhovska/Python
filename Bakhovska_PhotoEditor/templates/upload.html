@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>
+function showFile(evt) {
+    var tgt = evt.target || window.event.srcElement,
+        files = tgt.files;
+    // FileReader support
+    if (FileReader && files && files.length) {
+        var fr = new FileReader();
+        fr.addEventListener("load", function assignImageSrc(evt1) {
+				document.getElementById("blah").src = evt1.target.result;
+				document.getElementById("blah").style.visibility = "visible";
+                this.removeEventListener("load", assignImageSrc);
+            }, false);
+        fr.readAsDataURL(files[0]);
+    }
+
+    // Not supported
+    else {
+        // fallback -- perhaps submit the input to an iframe and temporarily store
+        // them on the server until the user's session ends.
+    }
+}
+</script>
+<meta charset=utf-8 />
+<title>Upload</title>
+<!--[if IE]>
+  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+<style>
+  article, aside, figure, footer, header, hgroup,
+  menu, nav, section { display: block; }
+</style>
+</head>
+<body>
+      <form action = "http://localhost:5000/uploader" method = "POST"
+         enctype = "multipart/form-data">
+         <input type = "file" name = "file" onchange="showFile(this);"/>
+         <input type = "submit" />
+		 <div style="height: 500; width: 500;">
+		 <img id="blah" style="max-height: 50%; max-width: 50%; object-fit: contain; visibility: hidden"/> 
+         </div>
+      </form>
+
+</body>
+</html>
